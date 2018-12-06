@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="white">#ffffff</color>
+    <color name="input_filed_color">#c0c0c0</color>
+    <color name="login_status_bar"> #54998d </color>
+    <color name="divider"> #d2dad9 </color>
+</resources>

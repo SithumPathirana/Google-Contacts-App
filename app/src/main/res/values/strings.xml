@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Sample Application</string>
+    <string name="welcome">Welcome!!</string>
+    <string name="sign_in_message">Sign in with your Google account</string>
+    <string name="login_button">Sign In</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="contacts">Your Contacts</string>
+    <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
+    <string name="permission_fail_message"> We won\'t be able to get your contacts if you do not give us permission </string>
+</resources>
