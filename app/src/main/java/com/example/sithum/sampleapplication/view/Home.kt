@@ -1,5 +1,6 @@
-package com.example.sithum.sampleapplication
+package com.example.sithum.sampleapplication.view
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
@@ -11,6 +12,9 @@ import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
+import com.example.sithum.sampleapplication.Contact
+import com.example.sithum.sampleapplication.GoogleContactsAPI
+import com.example.sithum.sampleapplication.R
 import com.example.sithum.sampleapplication.retrofit.RetrofitBuilder
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -41,6 +45,8 @@ class Home : AppCompatActivity() {
 
     private val GRANT_TYPE_AUTHORIZATION_CODE = "authorization_code"
 
+    val GRANT_TYPE_REFRESH_TOKEN = "refresh_token"
+
     private val CODE = "code"
 
     private val ERROR_CODE = "error"
@@ -60,15 +66,6 @@ class Home : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
-
-        recyclerView = findViewById(R.id.recyclerView)
-        layoutManager = LinearLayoutManager(this)
-        recyclerView!!.layoutManager = layoutManager
-
-        // recyclerView.adapter=MyAdapter(generateValues())
-
-        //getGoogleContacts()
 
         val uriData = intent.data
         if (uriData != null && !TextUtils.isEmpty(uriData.scheme)) {
@@ -79,6 +76,7 @@ class Home : AppCompatActivity() {
 
                 if (!TextUtils.isEmpty(code)) {
                     getTokenFromUrl()
+
                 }
                 if (!TextUtils.isEmpty(error)) {
                     Toast.makeText(this, R.string.permission_fail_message, Toast.LENGTH_LONG).show()
@@ -88,7 +86,21 @@ class Home : AppCompatActivity() {
                 }
             }
         } else {
-            getAuthoriazation()
+
+            val oauthToken = OuthToken.Factory.create()
+            if (oauthToken==null || oauthToken.accessToken==null ){
+                if (oauthToken==null || oauthToken.refreshToken==null){
+                    Log.e(TAG, "onCreate: Launching authorization (first step)")
+                    getAuthoriazation()
+                }else{
+                    Log.e(TAG, "onCreate: refreshing the token :$oauthToken")
+                    refreshTokenFromUrl(oauthToken)
+                }
+
+            }else{
+                Log.e(TAG, "onCreate: Token available, just launch MainActivity")
+                setContactsActivity(false)
+            }
         }
 
 
@@ -103,58 +115,8 @@ class Home : AppCompatActivity() {
 //        return data
 //    }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-
-        if (item?.itemId == R.id.settings) {
-            Toast.makeText(this, "You clicked Settings", Toast.LENGTH_SHORT).show()
-        } else if (item?.itemId == R.id.logout) {
-            FirebaseAuth.getInstance().signOut()
-            if (FirebaseAuth.getInstance().currentUser == null) {
-                val intent = Intent(applicationContext, MainActivity::class.java)
-                startActivity(intent)
-            }
-        } else {
-            return super.onOptionsItemSelected(item)
-        }
-
-        return true
-    }
 
 
-//    private fun getAllContacts(){
-//        val loading = ProgressDialog.show(this, "Fetching Data", "Please wait...", false, true)
-//
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl(API_BASE_URL)
-//            .client(OkHttpClient())
-//            .addConverterFactory(SimpleXmlConverterFactory.create())
-//            .build()
-//
-//        val api = retrofit.create<GoogleContactsAPI>(GoogleContactsAPI::class.java!!)
-//
-//        val call = api.contacts
-//        call.enqueue(object : Callback<Responce> {
-//            override fun onResponse(call: Call<Responce>, response: retrofit2.Response<Responce>) {
-//                 kk = response.body()?.contacts
-//                 val p = ArrayList(kk!!)
-//                 adapter = PlanetAdapter(p)
-//                recyclerView!!.adapter = adapter
-//                loading.dismiss()
-//            }
-//
-//            override fun onFailure(call: Call<Responce>, t: Throwable) {
-//                loading.dismiss()
-//                println(t.localizedMessage)
-//            }
-//        })
-//
-//
-//    }
 
     private fun getAuthoriazation() {
         val authorizedURL = HttpUrl.parse("https://accounts.google.com/o/oauth2/v2/auth")
@@ -168,7 +130,10 @@ class Home : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_VIEW)
         val url: String = authorizedURL?.url().toString()
         intent.setData(Uri.parse(url))
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+        finish()
     }
 
 
@@ -189,18 +154,45 @@ class Home : AppCompatActivity() {
                     "The call getRequestTokenFormCall succeed with code=" + response.code() + " and has body = " + response.body()
                 )
 //                ok we have the token
-                 //response.body()!!.save()
+                 response.body()!!.save()
+                 setContactsActivity(true)
 
             }
 
             override fun onFailure(call: Call<OuthToken>, t: Throwable) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 println(""+t.localizedMessage)
             }
 
         })
 
     }
+
+      private fun refreshTokenFromUrl(outhToken:OuthToken){
+          val oAuthServer = RetrofitBuilder.getSimpleClient(this)
+          val refreshTokenFormCall = oAuthServer.refreshTokenForm(
+              outhToken.refreshToken,
+              CLIENT_ID,
+              GRANT_TYPE_REFRESH_TOKEN
+          )
+          refreshTokenFormCall.enqueue(object : Callback<OuthToken> {
+              override fun onResponse(call: Call<OuthToken>, response: Response<OuthToken>) {
+                  Log.e(TAG, "===============New Call==========================")
+                  Log.e(
+                      TAG,
+                      "The call refreshTokenFormUrl succeed with code=" + response.code() + " and has body = " + response.body()
+                  )
+                  //ok we have the token
+                  response.body()!!.save()
+                  setContactsActivity(true)
+              }
+
+              override fun onFailure(call: Call<OuthToken>, t: Throwable) {
+                  Log.e(TAG, "===============New Call==========================")
+                  Log.e(TAG, "The call refreshTokenFormCall failed", t)
+
+              }
+          })
+      }
 
 
     private fun getGoogleContacts() {
@@ -227,6 +219,17 @@ class Home : AppCompatActivity() {
         super.onPause()
         disposable?.dispose()
     }
+
+    private fun setContactsActivity(newTask:Boolean){
+        val intent = Intent(this, Contacts::class.java)
+        if (newTask) {
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+        //you can die so
+        finish()
+    }
+
 
 
 //class MyAdapter(private val myDataset: List<Model.Entry>) :
@@ -260,16 +263,17 @@ class Home : AppCompatActivity() {
 //
 //}
 
+
     internal class PlanetAdapter(private val contactList: ArrayList<Contact>) :
         RecyclerView.Adapter<PlanetAdapter.PlanetViewHolder>() {
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanetAdapter.PlanetViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanetViewHolder {
             val v = LayoutInflater.from(parent.context).inflate(R.layout.contact_layout, parent, false)
             val viewHolder = PlanetViewHolder(v)
             return viewHolder
         }
 
-        override fun onBindViewHolder(holder: PlanetAdapter.PlanetViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: PlanetViewHolder, position: Int) {
             holder?.contactName?.text = contactList[position].name
             holder?.contactNumber?.text = contactList[position].phoneNumber
         }

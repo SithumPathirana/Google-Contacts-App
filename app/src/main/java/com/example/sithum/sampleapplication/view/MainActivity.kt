@@ -1,9 +1,10 @@
-package com.example.sithum.sampleapplication
+package com.example.sithum.sampleapplication.view
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.sithum.sampleapplication.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.SignInButton
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             .requestEmail()
             .build()
 
-        println("Client Id : "+R.string.default_web_client_id)
+        println("Client Id : "+ R.string.default_web_client_id)
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
         signInButton=findViewById(R.id.sign_in_button)
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateUI(currentUser:FirebaseUser?){
        if (currentUser != null){
-           val intent= Intent(this,Home::class.java)
+           val intent= Intent(this, Home::class.java)
            startActivity(intent)
        } else{
            println("User has not logged in")

@@ -14,8 +14,16 @@ interface OAuthServerIntf {
                          @Field("redirect_uri")redirect_uri:String,
                          @Field("grant_type")grant_type:String): Call<OuthToken>
 
+    @FormUrlEncoded
+    @POST("oauth2/v4/token")
+    fun refreshTokenForm(
+        @Field("refresh_token") refresh_token: String?,
+        @Field("client_id") client_id: String,
+        @Field("grant_type") grant_type: String
+    ): Call<OuthToken>
+
 
     @GET("full")
     fun getContacts(@Query("updated-min") updated_min: String,
-                    @Query("max-results") max_results: Int): Observable<Responce>
+                    @Query("max-results") max_results: Int): Call<Responce>
 }

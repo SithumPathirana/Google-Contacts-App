@@ -1,9 +1,10 @@
-package com.example.sithum.sampleapplication
+package com.example.sithum.sampleapplication.view
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import com.example.sithum.sampleapplication.R
 
 class LauncherActivity : AppCompatActivity() {
 
@@ -13,7 +14,7 @@ class LauncherActivity : AppCompatActivity() {
     private val mRunnable: Runnable = Runnable {
         if (!isFinishing) {
 
-            val intent = Intent(applicationContext,MainActivity::class.java)
+            val intent = Intent(applicationContext, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
