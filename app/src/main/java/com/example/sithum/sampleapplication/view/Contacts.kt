@@ -1,18 +1,18 @@
 package com.example.sithum.sampleapplication.view
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import com.example.sithum.sampleapplication.Contact
-import com.example.sithum.sampleapplication.GoogleContactsAPI
-import com.example.sithum.sampleapplication.R
-import com.example.sithum.sampleapplication.Responce
+import com.example.sithum.sampleapplication.*
 import com.example.sithum.sampleapplication.retrofit.RetrofitBuilder
 import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
@@ -23,6 +23,7 @@ import retrofit2.Response
 class Contacts : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
+    lateinit var progressSpinner: ProgressBar
     private var adapter: RecyclerView.Adapter<*>? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
     private var kk: List<Contact>? = null
@@ -30,6 +31,7 @@ class Contacts : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contacts)
+        progressSpinner=findViewById(R.id.progressBar1)
         recyclerView = findViewById(R.id.recyclerView)
         layoutManager = LinearLayoutManager(this)
         recyclerView!!.layoutManager = layoutManager
@@ -47,6 +49,11 @@ class Contacts : AppCompatActivity() {
             Toast.makeText(this, "You clicked Settings", Toast.LENGTH_SHORT).show()
         } else if (item?.itemId == R.id.logout) {
             FirebaseAuth.getInstance().signOut()
+            val sp = MyApplication.instance?.getSharedPreferences(com.example.sithum.sampleapplication.retrofit.OAUTH_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+             sp?.edit()?.remove(com.example.sithum.sampleapplication.retrofit.SP_TOKEN_KEY)?.apply()
+            sp?.edit()?.remove(com.example.sithum.sampleapplication.retrofit.SP_REFRESH_TOKEN_KEY)?.apply()
+            sp?.edit()?.remove(com.example.sithum.sampleapplication.retrofit.SP_TOKEN_TYPE_KEY)?.apply()
+            sp?.edit()?.remove(com.example.sithum.sampleapplication.retrofit.SP_TOKEN_EXPIRED_AFTER_KEY)?.apply()
             if (FirebaseAuth.getInstance().currentUser == null) {
                 val intent = Intent(applicationContext, MainActivity::class.java)
                 startActivity(intent)
@@ -60,7 +67,7 @@ class Contacts : AppCompatActivity() {
 
 
     private fun getAllContacts(){
-
+        progressSpinner.setVisibility(View.VISIBLE);
         val server = RetrofitBuilder.getAuthClient(this)
         val contactList:Call<Responce> = server.getContacts("2011-03-16T00:00:00",100)
 
@@ -106,7 +113,7 @@ class Contacts : AppCompatActivity() {
 //            }
 //        })
 
-
+        progressSpinner.setVisibility(View.GONE);
     }
 
 

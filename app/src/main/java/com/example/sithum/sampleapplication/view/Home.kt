@@ -1,6 +1,7 @@
 package com.example.sithum.sampleapplication.view
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
@@ -14,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.sithum.sampleapplication.Contact
 import com.example.sithum.sampleapplication.GoogleContactsAPI
+import com.example.sithum.sampleapplication.MyApplication
 import com.example.sithum.sampleapplication.R
 import com.example.sithum.sampleapplication.retrofit.RetrofitBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +28,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
+
+
+private val OAUTH_SHARED_PREFERENCE_NAME = "OAuthPrefs"
+private val SP_TOKEN_KEY = "token"
+private val SP_TOKEN_TYPE_KEY = "token_type"
+private val SP_TOKEN_EXPIRED_AFTER_KEY = "expired_after"
+private val SP_REFRESH_TOKEN_KEY = "refresh_token"
 
 class Home : AppCompatActivity() {
     private val TAG = "LoginActivity"
@@ -69,6 +79,7 @@ class Home : AppCompatActivity() {
 
         val uriData = intent.data
         if (uriData != null && !TextUtils.isEmpty(uriData.scheme)) {
+            println("The uri scheme data is "+uriData.scheme)
             if (scheme.equals(uriData.scheme)) {
                 code = uriData.getQueryParameter(CODE)
                 error = uriData.getQueryParameter(ERROR_CODE)
@@ -130,6 +141,8 @@ class Home : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_VIEW)
         val url: String = authorizedURL?.url().toString()
         intent.setData(Uri.parse(url))
+        Log.e(TAG, "onCreate: Getting authorization from Google")
+        Log.e(TAG, "the url is : " + authorizedURL?.url().toString())
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
@@ -154,7 +167,7 @@ class Home : AppCompatActivity() {
                     "The call getRequestTokenFormCall succeed with code=" + response.code() + " and has body = " + response.body()
                 )
 //                ok we have the token
-                 response.body()!!.save()
+                 response.body()?.save()
                  setContactsActivity(true)
 
             }

@@ -4,35 +4,52 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.widget.ProgressBar
 import com.example.sithum.sampleapplication.R
+
+
+
 
 class LauncherActivity : AppCompatActivity() {
 
-    private var mDelayHandler: Handler? = null
-    private val SPLASH_DELAY: Long = 3000 //3 seconds
 
-    private val mRunnable: Runnable = Runnable {
-        if (!isFinishing) {
-
-            val intent = Intent(applicationContext, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-    }
+    lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_launcher)
-        mDelayHandler = Handler()
-        mDelayHandler!!.postDelayed(mRunnable, SPLASH_DELAY)
+        progressBar=findViewById(R.id.progressBar)
+
+       Thread(
+           Runnable {
+               showProgress()
+               startActivity()
+               finish()
+           }
+       ).start()
+
+
+
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (mDelayHandler!=null){
-            mDelayHandler!!.removeCallbacks(mRunnable)
+    private fun showProgress(){
+        var progress = 0
+        while (progress < 100) {
+            try {
+                Thread.sleep(200)
+                progressBar.setProgress(progress)
+            } catch (e: Exception) {
+                e.printStackTrace()
+
+            }
+
+            progress += 10
         }
     }
 
+    private fun startActivity(){
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        startActivity(intent)
+    }
 
 }

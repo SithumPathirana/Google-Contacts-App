@@ -31,7 +31,7 @@ class Contact{
     @field:Element(name = "title",required = false)
     var name: String? = null
 
-    @field:Element(name = "gd:phoneNumber",required = false)
+    @field:Element(name = "phoneNumber",required = false)
     var phoneNumber: String? = null
 
 }

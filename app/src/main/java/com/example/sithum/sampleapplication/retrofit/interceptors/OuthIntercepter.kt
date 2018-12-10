@@ -26,6 +26,7 @@ class OuthIntercepter:Interceptor{
         if (!TextUtils.isEmpty(accessToken) && !TextUtils.isEmpty(accessTokenType)) {
             Log.e(TAG, "In the interceptor adding the header authorization with : $accessTokenType $accessToken")
             builder.header("Authorization", accessTokenType + " " + accessToken)
+            builder.header("GData-Version","3.0")
         } else {
             Log.e(TAG, "In the interceptor there is a problem with : $accessTokenType $accessToken")
             //you should launch the loginActivity to fix that:

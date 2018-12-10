@@ -4,40 +4,47 @@ package com.example.sithum.sampleapplication.retrofit
 import android.content.Context
 import android.util.Log
 import com.example.sithum.sampleapplication.MyApplication
+import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 
 
-private val OAUTH_SHARED_PREFERENCE_NAME = "OAuthPrefs"
-private val SP_TOKEN_KEY = "token"
-private val SP_TOKEN_TYPE_KEY = "token_type"
-private val SP_TOKEN_EXPIRED_AFTER_KEY = "expired_after"
-private val SP_REFRESH_TOKEN_KEY = "refresh_token"
+public val OAUTH_SHARED_PREFERENCE_NAME = "OAuthPrefs"
+public val SP_TOKEN_KEY = "token"
+public val SP_TOKEN_TYPE_KEY = "token_type"
+public val SP_TOKEN_EXPIRED_AFTER_KEY = "expired_after"
+public val SP_REFRESH_TOKEN_KEY = "refresh_token"
 
-class OuthToken{
+ class OuthToken{
     private val TAG = "OAuthToken"
 
 
 
-    @Json(name = "access_token")
+    @SerializedName("access_token")
     var accessToken: String? = null
-    @Json(name = "token_type")
+    @SerializedName("token_type")
     var tokenType: String? = null
-    @Json(name = "expires_in")
+    @SerializedName("expires_in")
     var expiresIn: Long = 0
-     var expiredAfterMilli: Long = 0
-    @Json(name = "refresh_token")
+     @Json(name = "refresh_token")
      var refreshToken: String? = null
+
+     var expiredAfterMilli: Long = 0
 
     fun save() {
         Log.e(TAG, "Savng the following element " + this)
         //update expired_after
-        expiredAfterMilli = System.currentTimeMillis() + expiresIn * 1000
+        expiredAfterMilli = System.currentTimeMillis() + (expiresIn * 1000)
         Log.e(
             TAG,
             "Savng the following element and expiredAfterMilli =" + expiredAfterMilli + " where now=" + System.currentTimeMillis() + " and expired in =" + expiresIn
         )
         val sp = MyApplication.instance?.getSharedPreferences(OAUTH_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
         val ed = sp?.edit()
+        Log.e(TAG, "The acess token is "+accessToken)
+        Log.e(TAG, "The token type is "+tokenType)
+        Log.e(TAG, "The expired after is "+expiresIn)
+        Log.e(TAG, "The refresh token is "+refreshToken)
+
         ed?.putString(SP_TOKEN_KEY, accessToken)
         ed?.putString(SP_TOKEN_TYPE_KEY, tokenType)
         ed?.putLong(SP_TOKEN_EXPIRED_AFTER_KEY, expiredAfterMilli)

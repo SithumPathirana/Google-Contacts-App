@@ -7,4 +7,5 @@
     <color name="input_filed_color">#c0c0c0</color>
     <color name="login_status_bar"> #54998d </color>
     <color name="divider"> #d2dad9 </color>
+    <color name="copyrightsColor">#6c6c6c</color>
 </resources>

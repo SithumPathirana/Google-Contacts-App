@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sample Application</string>
+    <string name="app_name">Contacts Manager</string>
     <string name="welcome">Welcome!!</string>
     <string name="sign_in_message">Sign in with your Google account</string>
     <string name="login_button">Sign In</string>
@@ -10,4 +10,5 @@
     <string name="logout">Logout</string>
     <string name="permission_fail_message">We won\'t be able to get your contacts if you do not give us permission
     </string>
+    <string name="copyrights">\@Copyrights - Sithum Pathirana</string>
 </resources>

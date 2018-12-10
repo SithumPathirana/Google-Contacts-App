@@ -9,20 +9,20 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.File
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
 object RetrofitBuilder{
 
     val BASE_URL = "https://www.googleapis.com/"
 
-    val CONTACTS_URL = "https://www.google.com/m8/feeds/contacts/default/"
+    val CONTACTS_URL = "https://www.google.com/m8/feeds/"
 
     fun getSimpleClient(ctx:Context) :OAuthServerIntf{
 
          val retrofit = Retrofit.Builder()
              .client(getSimpleOkHttpClient(ctx))
-             .addConverterFactory(StringConverterFactory())
-             .addConverterFactory(MoshiConverterFactory.create())
+             .addConverterFactory(GsonConverterFactory.create())
              .baseUrl(BASE_URL)
              .build()
          return retrofit.create(OAuthServerIntf::class.java)

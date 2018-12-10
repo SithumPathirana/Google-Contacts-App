@@ -1,7 +1,6 @@
 package com.example.sithum.sampleapplication.retrofit
 
 import com.example.sithum.sampleapplication.Responce
-import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -23,7 +22,7 @@ interface OAuthServerIntf {
     ): Call<OuthToken>
 
 
-    @GET("full")
+    @GET("contacts/default/full")
     fun getContacts(@Query("updated-min") updated_min: String,
                     @Query("max-results") max_results: Int): Call<Responce>
 }
