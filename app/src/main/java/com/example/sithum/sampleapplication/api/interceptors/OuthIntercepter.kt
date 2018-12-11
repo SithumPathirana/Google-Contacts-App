@@ -1,11 +1,11 @@
-package com.example.sithum.sampleapplication.retrofit.interceptors
+package com.example.sithum.sampleapplication.api.interceptors
 
 import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
 import com.example.sithum.sampleapplication.view.Home
 import com.example.sithum.sampleapplication.MyApplication
-import com.example.sithum.sampleapplication.retrofit.OuthToken
+import com.example.sithum.sampleapplication.models.OuthToken
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException

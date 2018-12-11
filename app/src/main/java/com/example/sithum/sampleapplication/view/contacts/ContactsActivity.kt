@@ -1,9 +1,7 @@
-package com.example.sithum.sampleapplication.view
+package com.example.sithum.sampleapplication.view.contacts
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -13,7 +11,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.example.sithum.sampleapplication.*
-import com.example.sithum.sampleapplication.retrofit.RetrofitBuilder
+import com.example.sithum.sampleapplication.models.Contact
+import com.example.sithum.sampleapplication.models.Responce
+import com.example.sithum.sampleapplication.api.RetrofitBuilder
+import com.example.sithum.sampleapplication.view.login.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,11 +50,11 @@ class Contacts : AppCompatActivity() {
             Toast.makeText(this, "You clicked Settings", Toast.LENGTH_SHORT).show()
         } else if (item?.itemId == R.id.logout) {
             FirebaseAuth.getInstance().signOut()
-            val sp = MyApplication.instance?.getSharedPreferences(com.example.sithum.sampleapplication.retrofit.OAUTH_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-             sp?.edit()?.remove(com.example.sithum.sampleapplication.retrofit.SP_TOKEN_KEY)?.apply()
-            sp?.edit()?.remove(com.example.sithum.sampleapplication.retrofit.SP_REFRESH_TOKEN_KEY)?.apply()
-            sp?.edit()?.remove(com.example.sithum.sampleapplication.retrofit.SP_TOKEN_TYPE_KEY)?.apply()
-            sp?.edit()?.remove(com.example.sithum.sampleapplication.retrofit.SP_TOKEN_EXPIRED_AFTER_KEY)?.apply()
+            val sp = MyApplication.instance?.getSharedPreferences(com.example.sithum.sampleapplication.models.OAUTH_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+             sp?.edit()?.remove(com.example.sithum.sampleapplication.models.SP_TOKEN_KEY)?.apply()
+            sp?.edit()?.remove(com.example.sithum.sampleapplication.models.SP_REFRESH_TOKEN_KEY)?.apply()
+            sp?.edit()?.remove(com.example.sithum.sampleapplication.models.SP_TOKEN_TYPE_KEY)?.apply()
+            sp?.edit()?.remove(com.example.sithum.sampleapplication.models.SP_TOKEN_EXPIRED_AFTER_KEY)?.apply()
             if (FirebaseAuth.getInstance().currentUser == null) {
                 val intent = Intent(applicationContext, MainActivity::class.java)
                 startActivity(intent)
@@ -122,7 +123,8 @@ class Contacts : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanetViewHolder {
             val v = LayoutInflater.from(parent.context).inflate(R.layout.contact_layout, parent, false)
-            val viewHolder = PlanetViewHolder(v)
+            val viewHolder =
+                PlanetViewHolder(v)
             return viewHolder
         }
 

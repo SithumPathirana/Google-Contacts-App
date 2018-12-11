@@ -1,4 +1,4 @@
-package com.example.sithum.sampleapplication
+package com.example.sithum.sampleapplication.models
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList

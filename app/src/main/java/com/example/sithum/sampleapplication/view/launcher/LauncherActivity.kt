@@ -1,13 +1,11 @@
-package com.example.sithum.sampleapplication.view
+package com.example.sithum.sampleapplication.view.launcher
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.widget.ProgressBar
 import com.example.sithum.sampleapplication.R
-
-
+import com.example.sithum.sampleapplication.view.login.MainActivity
 
 
 class LauncherActivity : AppCompatActivity() {

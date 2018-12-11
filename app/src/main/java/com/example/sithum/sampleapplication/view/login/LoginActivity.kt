@@ -1,10 +1,11 @@
-package com.example.sithum.sampleapplication.view
+package com.example.sithum.sampleapplication.view.login
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.sithum.sampleapplication.R
+import com.example.sithum.sampleapplication.view.Home
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.SignInButton
@@ -16,7 +17,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.GoogleAuthProvider
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),LoginContract.View {
+
+    private lateinit var mPresenter : LoginContract.Presenter
 
     private lateinit var auth: FirebaseAuth
     private lateinit var signInButton: SignInButton
@@ -25,16 +28,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        signInButton=findViewById(R.id.sign_in_button)
+
+        LoginPresenter(this)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
-        println("Client Id : "+ R.string.default_web_client_id)
-
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-        signInButton=findViewById(R.id.sign_in_button)
+
         signInButton.setOnClickListener {
             when (it.id) {
                 R.id.sign_in_button -> signIn()
@@ -44,6 +48,10 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
     }
 
+
+    override fun setPresenter(presenter: LoginContract.Presenter) {
+            this.mPresenter=presenter
+    }
 
     override fun onStart() {
         super.onStart()
@@ -66,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         mGoogleSignInClient.signOut()
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent,100)
+
 
     }
 

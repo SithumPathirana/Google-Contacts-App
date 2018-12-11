@@ -1,6 +1,7 @@
-package com.example.sithum.sampleapplication.retrofit
+package com.example.sithum.sampleapplication.api
 
-import com.example.sithum.sampleapplication.Responce
+import com.example.sithum.sampleapplication.models.OuthToken
+import com.example.sithum.sampleapplication.models.Responce
 import retrofit2.Call
 import retrofit2.http.*
 

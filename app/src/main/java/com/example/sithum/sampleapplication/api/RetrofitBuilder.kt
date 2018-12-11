@@ -1,12 +1,10 @@
-package com.example.sithum.sampleapplication.retrofit
+package com.example.sithum.sampleapplication.api
 
 import android.content.Context
-import com.example.sithum.sampleapplication.retrofit.converters.StringConverterFactory
-import com.example.sithum.sampleapplication.retrofit.interceptors.OuthIntercepter
+import com.example.sithum.sampleapplication.api.interceptors.OuthIntercepter
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.File
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.converter.gson.GsonConverterFactory

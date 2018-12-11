@@ -1,4 +1,4 @@
-package com.example.sithum.sampleapplication.retrofit
+package com.example.sithum.sampleapplication.models
 
 
 import android.content.Context
@@ -8,18 +8,16 @@ import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 
 
-public val OAUTH_SHARED_PREFERENCE_NAME = "OAuthPrefs"
-public val SP_TOKEN_KEY = "token"
-public val SP_TOKEN_TYPE_KEY = "token_type"
-public val SP_TOKEN_EXPIRED_AFTER_KEY = "expired_after"
-public val SP_REFRESH_TOKEN_KEY = "refresh_token"
+ val OAUTH_SHARED_PREFERENCE_NAME = "OAuthPrefs"
+ val SP_TOKEN_KEY = "token"
+ val SP_TOKEN_TYPE_KEY = "token_type"
+ val SP_TOKEN_EXPIRED_AFTER_KEY = "expired_after"
+ val SP_REFRESH_TOKEN_KEY = "refresh_token"
 
  class OuthToken{
     private val TAG = "OAuthToken"
 
-
-
-    @SerializedName("access_token")
+     @SerializedName("access_token")
     var accessToken: String? = null
     @SerializedName("token_type")
     var tokenType: String? = null
@@ -54,7 +52,7 @@ public val SP_REFRESH_TOKEN_KEY = "refresh_token"
 
      object Factory {
 
-         fun create():OuthToken?{
+         fun create(): OuthToken?{
              val TAG = "OAuthToken.Factory"
              var expiredAfter: Long = 0
              val sp = MyApplication.instance?.getSharedPreferences(OAUTH_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)

@@ -14,10 +14,10 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".view.MainActivity"
+                android:name=".view.login.MainActivity"
                 android:theme="@style/LoginScreen">
         </activity>
-        <activity android:name=".view.LauncherActivity">
+        <activity android:name=".view.launcher.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -37,7 +37,7 @@
                         android:scheme="http"/>
             </intent-filter>
         </activity>
-        <activity android:name=".view.Contacts"
+        <activity android:name=".view.contacts.Contacts"
                   android:theme="@style/HomeScreen">
         </activity>
     </application>
