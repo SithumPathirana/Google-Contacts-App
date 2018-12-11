@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.sithum.sampleapplication.R
-import com.example.sithum.sampleapplication.view.Home
+import com.example.sithum.sampleapplication.view.authorization.Home
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.SignInButton
@@ -19,7 +19,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 
 class MainActivity : AppCompatActivity(),LoginContract.View {
 
-    private lateinit var mPresenter : LoginContract.Presenter
+    private lateinit var loginPresenter : LoginContract.Presenter
 
     private lateinit var auth: FirebaseAuth
     private lateinit var signInButton: SignInButton
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(),LoginContract.View {
 
 
     override fun setPresenter(presenter: LoginContract.Presenter) {
-            this.mPresenter=presenter
+            this.loginPresenter=presenter
     }
 
     override fun onStart() {

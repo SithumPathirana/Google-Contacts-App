@@ -1,6 +1,7 @@
 package com.example.sithum.sampleapplication.api
 
 import android.content.Context
+import com.example.sithum.sampleapplication.Constants
 import com.example.sithum.sampleapplication.api.interceptors.OuthIntercepter
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -12,18 +13,14 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
 object RetrofitBuilder{
 
-    val BASE_URL = "https://www.googleapis.com/"
-
-    val CONTACTS_URL = "https://www.google.com/m8/feeds/"
-
-    fun getSimpleClient(ctx:Context) :OAuthServerIntf{
+    fun getSimpleClient(ctx:Context) :ApiServerIntf{
 
          val retrofit = Retrofit.Builder()
              .client(getSimpleOkHttpClient(ctx))
              .addConverterFactory(GsonConverterFactory.create())
-             .baseUrl(BASE_URL)
+             .baseUrl(Constants.BASE_URL)
              .build()
-         return retrofit.create(OAuthServerIntf::class.java)
+         return retrofit.create(ApiServerIntf::class.java)
      }
 
 
@@ -41,14 +38,14 @@ object RetrofitBuilder{
             .build()
     }
 
-    fun getAuthClient(ctx:Context):OAuthServerIntf{
+    fun getAuthClient(ctx:Context):ApiServerIntf{
       val  raCustom = Retrofit.Builder ()
           .client(getOAuthOkHttpClient(ctx))
-          .baseUrl(CONTACTS_URL)
+          .baseUrl(Constants.CONTACTS_URL)
           .addConverterFactory(SimpleXmlConverterFactory.create())
           .build()
 
-        val webServer = raCustom.create(OAuthServerIntf::class.java)
+        val webServer = raCustom.create(ApiServerIntf::class.java)
         return webServer
     }
 

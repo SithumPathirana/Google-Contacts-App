@@ -12,7 +12,7 @@ class LoginPresenter(private val view:LoginContract.View):LoginContract.Presente
     }
 
     override fun start() {
-          
+
     }
 
     override fun signIn(gso: GoogleSignInOptions, mGoogleSignInClient: GoogleSignInClient) {

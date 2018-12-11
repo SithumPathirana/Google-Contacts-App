@@ -86,10 +86,6 @@ class Contacts : AppCompatActivity() {
             }
         })
 
-
-
-       // val loading = ProgressDialog.show(this, "Fetching Data", "Please wait...", false, true)
-
 //        val retrofit = Retrofit.Builder()
 //            .baseUrl(API_BASE_URL)
 //            .client(OkHttpClient())

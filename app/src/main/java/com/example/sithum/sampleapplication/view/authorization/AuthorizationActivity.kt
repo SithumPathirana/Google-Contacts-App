@@ -20,8 +20,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class Home : AppCompatActivity() {
+class Home : AppCompatActivity(),AuthorizationContract.View {
     private val TAG = "LoginActivity"
+
+    private lateinit var authorizationPresenter: AuthorizationContract.Presenter
 
     lateinit var recyclerView: RecyclerView
     private var kk: List<Contact>? = null
@@ -91,6 +93,12 @@ class Home : AppCompatActivity() {
 
 
     }
+
+
+    override fun setPresenter(presenter: AuthorizationContract.Presenter) {
+        
+    }
+
 
     private fun getAuthoriazation() {
         val authorizedURL = HttpUrl.parse("https://accounts.google.com/o/oauth2/v2/auth")

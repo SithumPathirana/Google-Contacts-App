@@ -17,8 +17,6 @@ interface LoginContract {
         fun signIn(gso:GoogleSignInOptions,mGoogleSignInClient: GoogleSignInClient){
             mGoogleSignInClient.signOut()
             val signInIntent = mGoogleSignInClient.signInIntent
-
-
         }
     }
 
