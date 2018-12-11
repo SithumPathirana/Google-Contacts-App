@@ -5,7 +5,7 @@ import com.example.sithum.sampleapplication.models.Responce
 import retrofit2.Call
 import retrofit2.http.*
 
-interface OAuthServerIntf {
+interface ApiServerIntf {
 
     @FormUrlEncoded
     @POST("oauth2/v4/token")
