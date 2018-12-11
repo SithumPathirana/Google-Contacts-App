@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
+import com.example.sithum.sampleapplication.Constants
 import com.example.sithum.sampleapplication.models.Contact
 import com.example.sithum.sampleapplication.R
 import com.example.sithum.sampleapplication.api.RetrofitBuilder
@@ -28,23 +29,6 @@ class Home : AppCompatActivity(),AuthorizationContract.View {
     lateinit var recyclerView: RecyclerView
     private var kk: List<Contact>? = null
     private var adapter: RecyclerView.Adapter<*>? = null
-
-    private val CLIENT_ID = "317757690028-uicvsbdk14prm8kn1nu1f1peqc3vnvol.apps.googleusercontent.com"
-
-    private val REDIRECT_URI = "http://localhost"
-
-    val API_SCOPE = "https://www.google.com/m8/feeds/"
-
-    private val GRANT_TYPE_AUTHORIZATION_CODE = "authorization_code"
-
-    val GRANT_TYPE_REFRESH_TOKEN = "refresh_token"
-
-    private val CODE = "code"
-
-    private val ERROR_CODE = "error"
-
-    private val scheme = "http"
-
     private var code: String? = null
 
     private var error: String? = null
@@ -57,9 +41,9 @@ class Home : AppCompatActivity(),AuthorizationContract.View {
         val uriData = intent.data
         if (uriData != null && !TextUtils.isEmpty(uriData.scheme)) {
             println("The uri scheme data is "+uriData.scheme)
-            if (scheme.equals(uriData.scheme)) {
-                code = uriData.getQueryParameter(CODE)
-                error = uriData.getQueryParameter(ERROR_CODE)
+            if (Constants.scheme.equals(uriData.scheme)) {
+                code = uriData.getQueryParameter(Constants.CODE)
+                error = uriData.getQueryParameter(Constants.ERROR_CODE)
                 Log.e(TAG, "onCreate: handle result of authorization with code : " + code)
 
                 if (!TextUtils.isEmpty(code)) {
@@ -96,17 +80,17 @@ class Home : AppCompatActivity(),AuthorizationContract.View {
 
 
     override fun setPresenter(presenter: AuthorizationContract.Presenter) {
-        
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 
     private fun getAuthoriazation() {
         val authorizedURL = HttpUrl.parse("https://accounts.google.com/o/oauth2/v2/auth")
             ?.newBuilder()
-            ?.addQueryParameter("client_id", CLIENT_ID)
-            ?.addQueryParameter("scope", API_SCOPE)
-            ?.addQueryParameter("redirect_uri", REDIRECT_URI)
-            ?.addQueryParameter("response_type", CODE)
+            ?.addQueryParameter("client_id", Constants.CLIENT_ID)
+            ?.addQueryParameter("scope", Constants.API_SCOPE)
+            ?.addQueryParameter("redirect_uri", Constants.REDIRECT_URI)
+            ?.addQueryParameter("response_type", Constants.CODE)
             ?.build()
 
         val intent = Intent(Intent.ACTION_VIEW)
@@ -125,9 +109,9 @@ class Home : AppCompatActivity(),AuthorizationContract.View {
         val oAuthServer = RetrofitBuilder.getSimpleClient(this)
         val getRequestTokenFormCall = oAuthServer.requestTokenForm(
             code,
-            CLIENT_ID,
-            REDIRECT_URI,
-            GRANT_TYPE_AUTHORIZATION_CODE
+            Constants.CLIENT_ID,
+           Constants. REDIRECT_URI,
+           Constants. GRANT_TYPE_AUTHORIZATION_CODE
         )
 
         getRequestTokenFormCall.enqueue(object : Callback<OuthToken> {
@@ -155,8 +139,8 @@ class Home : AppCompatActivity(),AuthorizationContract.View {
           val oAuthServer = RetrofitBuilder.getSimpleClient(this)
           val refreshTokenFormCall = oAuthServer.refreshTokenForm(
               outhToken.refreshToken,
-              CLIENT_ID,
-              GRANT_TYPE_REFRESH_TOKEN
+              Constants.CLIENT_ID,
+              Constants.GRANT_TYPE_REFRESH_TOKEN
           )
           refreshTokenFormCall.enqueue(object : Callback<OuthToken> {
               override fun onResponse(call: Call<OuthToken>, response: Response<OuthToken>) {
