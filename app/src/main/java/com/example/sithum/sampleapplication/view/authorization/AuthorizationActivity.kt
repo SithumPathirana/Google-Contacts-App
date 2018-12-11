@@ -1,4 +1,4 @@
-package com.example.sithum.sampleapplication.view
+package com.example.sithum.sampleapplication.view.authorization
 
 import android.content.Intent
 import android.net.Uri
@@ -7,15 +7,11 @@ import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.util.Log
-import android.view.*
-import android.widget.TextView
 import android.widget.Toast
 import com.example.sithum.sampleapplication.models.Contact
 import com.example.sithum.sampleapplication.R
 import com.example.sithum.sampleapplication.api.RetrofitBuilder
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import okhttp3.HttpUrl
 import com.example.sithum.sampleapplication.models.OuthToken
 import com.example.sithum.sampleapplication.view.contacts.Contacts
