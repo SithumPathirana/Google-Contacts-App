@@ -1,47 +1,49 @@
 package com.example.sithum.sampleapplication.view.contacts
 
-import android.content.Context
+
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.example.sithum.sampleapplication.*
 import com.example.sithum.sampleapplication.models.Contact
-import com.example.sithum.sampleapplication.models.Responce
-import com.example.sithum.sampleapplication.api.RetrofitBuilder
 import com.example.sithum.sampleapplication.view.login.MainActivity
-import com.google.firebase.auth.FirebaseAuth
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import javax.inject.Inject
 
 
-class Contacts : AppCompatActivity() {
+class Contacts : AppCompatActivity(),ContactsContract.View {
 
     lateinit var recyclerView: RecyclerView
-    lateinit var progressSpinner: ProgressBar
     private var adapter: RecyclerView.Adapter<*>? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
-    private var kk: List<Contact>? = null
+
+
+    @Inject lateinit var contactsPresenter: ContactsContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contacts)
-        progressSpinner=findViewById(R.id.progressBar1)
         recyclerView = findViewById(R.id.recyclerView)
-        layoutManager = LinearLayoutManager(this)
-        recyclerView!!.layoutManager = layoutManager
-        getAllContacts()
+
+        ContactsPresenter(this)
+        contactsPresenter.getContacts(this)
     }
+
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
+    }
+
+
+    override fun setPresenter(presenter: ContactsContract.Presenter) {
+          this.contactsPresenter=presenter
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -49,16 +51,7 @@ class Contacts : AppCompatActivity() {
         if (item?.itemId == R.id.settings) {
             Toast.makeText(this, "You clicked Settings", Toast.LENGTH_SHORT).show()
         } else if (item?.itemId == R.id.logout) {
-            FirebaseAuth.getInstance().signOut()
-            val sp = MyApplication.instance?.getSharedPreferences(com.example.sithum.sampleapplication.models.OAUTH_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-             sp?.edit()?.remove(com.example.sithum.sampleapplication.models.SP_TOKEN_KEY)?.apply()
-            sp?.edit()?.remove(com.example.sithum.sampleapplication.models.SP_REFRESH_TOKEN_KEY)?.apply()
-            sp?.edit()?.remove(com.example.sithum.sampleapplication.models.SP_TOKEN_TYPE_KEY)?.apply()
-            sp?.edit()?.remove(com.example.sithum.sampleapplication.models.SP_TOKEN_EXPIRED_AFTER_KEY)?.apply()
-            if (FirebaseAuth.getInstance().currentUser == null) {
-                val intent = Intent(applicationContext, MainActivity::class.java)
-                startActivity(intent)
-            }
+            contactsPresenter.signOut()
         } else {
             return super.onOptionsItemSelected(item)
         }
@@ -67,24 +60,7 @@ class Contacts : AppCompatActivity() {
     }
 
 
-    private fun getAllContacts(){
-        progressSpinner.setVisibility(View.VISIBLE);
-        val server = RetrofitBuilder.getAuthClient(this)
-        val contactList:Call<Responce> = server.getContacts("2011-03-16T00:00:00",100)
 
-        contactList.enqueue(object:Callback<Responce> {
-
-            override fun onResponse(call: Call<Responce>, response: Response<Responce>) {
-                kk=response.body()?.contacts
-                val p = ArrayList(kk!!)
-                adapter = PlanetAdapter(p)
-                recyclerView!!.adapter = adapter
-            }
-
-            override fun onFailure(call: Call<Responce>, t: Throwable) {
-                println("Error while Reading the contacnts "+t.localizedMessage)
-            }
-        })
 
 //        val retrofit = Retrofit.Builder()
 //            .baseUrl(API_BASE_URL)
@@ -99,7 +75,7 @@ class Contacts : AppCompatActivity() {
 //            override fun onResponse(call: Call<Responce>, response: retrofit2.Response<Responce>) {
 //                kk = response.body()?.contacts
 //                val p = ArrayList(kk!!)
-//                adapter = Home.PlanetAdapter(p)
+//                adapter = Home.ContactListAdapter(p)
 //                recyclerView!!.adapter = adapter
 //                loading.dismiss()
 //            }
@@ -110,21 +86,46 @@ class Contacts : AppCompatActivity() {
 //            }
 //        })
 
-        progressSpinner.setVisibility(View.GONE);
+
+
+    override fun showContactList(contacts:List<Contact>?) {
+        val p = ArrayList(contacts!!)
+        layoutManager = LinearLayoutManager(this)
+        recyclerView!!.layoutManager = layoutManager
+        adapter = ContactListAdapter(p)
+        recyclerView!!.adapter = adapter
+    }
+
+    override fun showContactsFerchError() {
+        Toast.makeText(this, "Error while fetching contacts", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun goBackToLoginActivity(show: Boolean) {
+
+        if (show){
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    override fun viewContactInfo() {
+
     }
 
 
-    internal class PlanetAdapter(private val contactList: ArrayList<Contact>) :
-        RecyclerView.Adapter<PlanetAdapter.PlanetViewHolder>() {
+    internal class ContactListAdapter(private val contactList: ArrayList<Contact>) :
+        RecyclerView.Adapter<ContactListAdapter.ContactListViewHolder>() {
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanetViewHolder {
+        var onItemClick: ((Contact) -> Unit)? = null
+        var contacts: List<Contact> = emptyList()
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactListViewHolder {
             val v = LayoutInflater.from(parent.context).inflate(R.layout.contact_layout, parent, false)
-            val viewHolder =
-                PlanetViewHolder(v)
+            val viewHolder = ContactListViewHolder(v)
             return viewHolder
         }
 
-        override fun onBindViewHolder(holder: PlanetViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: ContactListViewHolder, position: Int) {
             holder?.contactName?.text = contactList[position].name
             holder?.contactNumber?.text = contactList[position].phoneNumber
         }
@@ -133,7 +134,7 @@ class Contacts : AppCompatActivity() {
             return contactList.size
         }
 
-        internal class PlanetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        inner class ContactListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             var contactName: TextView? = null
             var contactNumber: TextView? = null
@@ -141,6 +142,10 @@ class Contacts : AppCompatActivity() {
             init {
                 contactName = itemView.findViewById(R.id.contact_name) as TextView
                 contactNumber = itemView.findViewById(R.id.contact_number) as TextView
+
+                itemView.setOnClickListener{
+                       onItemClick?.invoke(contacts[adapterPosition])
+                }
             }
         }
     }

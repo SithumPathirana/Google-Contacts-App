@@ -9,7 +9,6 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import com.example.sithum.sampleapplication.Constants
-import com.example.sithum.sampleapplication.models.Contact
 import com.example.sithum.sampleapplication.R
 import com.example.sithum.sampleapplication.api.RetrofitBuilder
 import io.reactivex.disposables.Disposable
@@ -19,16 +18,16 @@ import com.example.sithum.sampleapplication.view.contacts.Contacts
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 
 class Home : AppCompatActivity(),AuthorizationContract.View {
     private val TAG = "LoginActivity"
 
-    private lateinit var authorizationPresenter: AuthorizationContract.Presenter
+    @Inject lateinit var authorizationPresenter: AuthorizationContract.Presenter
 
     lateinit var recyclerView: RecyclerView
-    private var kk: List<Contact>? = null
-    private var adapter: RecyclerView.Adapter<*>? = null
+
     private var code: String? = null
 
     private var error: String? = null
@@ -80,7 +79,7 @@ class Home : AppCompatActivity(),AuthorizationContract.View {
 
 
     override fun setPresenter(presenter: AuthorizationContract.Presenter) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        this.authorizationPresenter=presenter
     }
 
 

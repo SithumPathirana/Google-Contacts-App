@@ -7,4 +7,8 @@ class AuthorizationPresenter(private val view:AuthorizationContract.View ):Autho
 
     }
 
+    override fun getTokenFromUrl() {
+
+    }
+
 }
