@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".view.authorization.Home"
+                android:name=".view.authorization.AuthorizationActivity"
                 >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>

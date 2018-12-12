@@ -12,6 +12,7 @@ package com.example.sithum.sampleapplication
          const val GRANT_TYPE_REFRESH_TOKEN = "refresh_token"
          const val CODE = "code"
          const  val ERROR_CODE = "error"
+         const val OAUTH_URL="https://accounts.google.com/o/oauth2/v2/auth"
          const val scheme = "http"
      }
  }

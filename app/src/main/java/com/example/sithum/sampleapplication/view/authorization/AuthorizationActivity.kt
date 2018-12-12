@@ -21,7 +21,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 
-class Home : AppCompatActivity(),AuthorizationContract.View {
+class AuthorizationActivity : AppCompatActivity(),AuthorizationContract.View {
     private val TAG = "LoginActivity"
 
     @Inject lateinit var authorizationPresenter: AuthorizationContract.Presenter
@@ -32,21 +32,21 @@ class Home : AppCompatActivity(),AuthorizationContract.View {
 
     private var error: String? = null
 
-    var disposable: Disposable? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        AuthorizationPresenter(this)
+
         val uriData = intent.data
         if (uriData != null && !TextUtils.isEmpty(uriData.scheme)) {
-            println("The uri scheme data is "+uriData.scheme)
             if (Constants.scheme.equals(uriData.scheme)) {
                 code = uriData.getQueryParameter(Constants.CODE)
                 error = uriData.getQueryParameter(Constants.ERROR_CODE)
                 Log.e(TAG, "onCreate: handle result of authorization with code : " + code)
 
                 if (!TextUtils.isEmpty(code)) {
-                    getTokenFromUrl()
+                  getTokenFromUrl()
+                  // authorizationPresenter.getTokenFromUrl(code,this)
 
                 }
                 if (!TextUtils.isEmpty(error)) {
@@ -84,7 +84,7 @@ class Home : AppCompatActivity(),AuthorizationContract.View {
 
 
     private fun getAuthoriazation() {
-        val authorizedURL = HttpUrl.parse("https://accounts.google.com/o/oauth2/v2/auth")
+        val authorizedURL = HttpUrl.parse(Constants.OAUTH_URL)
             ?.newBuilder()
             ?.addQueryParameter("client_id", Constants.CLIENT_ID)
             ?.addQueryParameter("scope", Constants.API_SCOPE)
@@ -120,7 +120,6 @@ class Home : AppCompatActivity(),AuthorizationContract.View {
                     TAG,
                     "The call getRequestTokenFormCall succeed with code=" + response.code() + " and has body = " + response.body()
                 )
-//                ok we have the token
                  response.body()?.save()
                  setContactsActivity(true)
 
@@ -161,12 +160,9 @@ class Home : AppCompatActivity(),AuthorizationContract.View {
           })
       }
 
-    override fun onPause() {
-        super.onPause()
-        disposable?.dispose()
-    }
 
-    private fun setContactsActivity(newTask:Boolean){
+
+    override fun setContactsActivity(newTask:Boolean){
         val intent = Intent(this, Contacts::class.java)
         if (newTask) {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK

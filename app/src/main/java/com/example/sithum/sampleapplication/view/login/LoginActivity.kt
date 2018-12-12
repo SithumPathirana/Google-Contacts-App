@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.sithum.sampleapplication.R
-import com.example.sithum.sampleapplication.view.authorization.Home
+import com.example.sithum.sampleapplication.view.authorization.AuthorizationActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.SignInButton
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(),LoginContract.View {
 
     override fun updateUI(currentUser:FirebaseUser?){
        if (currentUser != null){
-           val intent= Intent(this, Home::class.java)
+           val intent= Intent(this, AuthorizationActivity::class.java)
            startActivity(intent)
        } else{
            Log.e(TAG,"User has not logged in")
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(),LoginContract.View {
     }
 
 
-    private fun signIn() {
+     fun signIn() {
         mGoogleSignInClient.signOut()
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent,100)

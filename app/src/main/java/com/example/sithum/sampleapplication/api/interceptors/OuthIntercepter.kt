@@ -3,7 +3,7 @@ package com.example.sithum.sampleapplication.api.interceptors
 import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
-import com.example.sithum.sampleapplication.view.authorization.Home
+import com.example.sithum.sampleapplication.view.authorization.AuthorizationActivity
 import com.example.sithum.sampleapplication.MyApplication
 import com.example.sithum.sampleapplication.models.OuthToken
 import okhttp3.Interceptor
@@ -30,7 +30,7 @@ class OuthIntercepter:Interceptor{
         } else {
             Log.e(TAG, "In the interceptor there is a problem with : $accessTokenType $accessToken")
             //you should launch the loginActivity to fix that:
-            val i = Intent(MyApplication.instance, Home::class.java)
+            val i = Intent(MyApplication.instance, AuthorizationActivity::class.java)
             i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             MyApplication.instance?.startActivity(i)
         }
