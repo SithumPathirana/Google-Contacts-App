@@ -32,7 +32,6 @@ class AuthorizationPresenter(private val view:AuthorizationContract.View ):Autho
                     TAG,
                     "The call getRequestTokenFormCall succeed with code=" + response.code() + " and has body = " + response.body()
                 )
-//                ok we have the token
                 response.body()?.save()
                 view.setContactsActivity(true)
 

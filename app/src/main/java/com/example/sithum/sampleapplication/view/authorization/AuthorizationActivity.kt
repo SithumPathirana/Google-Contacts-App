@@ -11,7 +11,6 @@ import android.widget.Toast
 import com.example.sithum.sampleapplication.Constants
 import com.example.sithum.sampleapplication.R
 import com.example.sithum.sampleapplication.api.RetrofitBuilder
-import io.reactivex.disposables.Disposable
 import okhttp3.HttpUrl
 import com.example.sithum.sampleapplication.models.OuthToken
 import com.example.sithum.sampleapplication.view.contacts.Contacts
@@ -34,7 +33,7 @@ class AuthorizationActivity : AppCompatActivity(),AuthorizationContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+       // setContentView(R.layout.activity_home)
         AuthorizationPresenter(this)
 
         val uriData = intent.data
@@ -46,7 +45,7 @@ class AuthorizationActivity : AppCompatActivity(),AuthorizationContract.View {
 
                 if (!TextUtils.isEmpty(code)) {
                   getTokenFromUrl()
-                  // authorizationPresenter.getTokenFromUrl(code,this)
+                   //authorizationPresenter.getTokenFromUrl(code,this)
 
                 }
                 if (!TextUtils.isEmpty(error)) {
@@ -81,7 +80,6 @@ class AuthorizationActivity : AppCompatActivity(),AuthorizationContract.View {
     override fun setPresenter(presenter: AuthorizationContract.Presenter) {
         this.authorizationPresenter=presenter
     }
-
 
     private fun getAuthoriazation() {
         val authorizedURL = HttpUrl.parse(Constants.OAUTH_URL)
