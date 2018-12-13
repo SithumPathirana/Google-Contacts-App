@@ -12,10 +12,6 @@ import retrofit2.Response
 class AuthorizationPresenter(private val view:AuthorizationContract.View ):AuthorizationContract.Presenter{
      private val TAG="AuthorizationPresenter"
 
-    override fun start() {
-
-    }
-
     override fun getTokenFromUrl(code:String?,ctx:Context) {
         val oAuthServer = RetrofitBuilder.getSimpleClient(ctx)
         val getRequestTokenFormCall = oAuthServer.requestTokenForm(
@@ -42,6 +38,10 @@ class AuthorizationPresenter(private val view:AuthorizationContract.View ):Autho
             }
 
         })
+    }
+
+    override fun setAuthUrl() {
+
     }
 
 }

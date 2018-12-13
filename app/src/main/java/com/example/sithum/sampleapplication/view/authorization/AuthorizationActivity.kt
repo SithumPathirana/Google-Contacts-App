@@ -33,9 +33,6 @@ class AuthorizationActivity : AppCompatActivity(),AuthorizationContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       // setContentView(R.layout.activity_home)
-        AuthorizationPresenter(this)
-
         val uriData = intent.data
         if (uriData != null && !TextUtils.isEmpty(uriData.scheme)) {
             if (Constants.scheme.equals(uriData.scheme)) {
@@ -45,7 +42,7 @@ class AuthorizationActivity : AppCompatActivity(),AuthorizationContract.View {
 
                 if (!TextUtils.isEmpty(code)) {
                   getTokenFromUrl()
-                   //authorizationPresenter.getTokenFromUrl(code,this)
+                  // authorizationPresenter.getTokenFromUrl(code,this)
 
                 }
                 if (!TextUtils.isEmpty(error)) {
@@ -76,11 +73,6 @@ class AuthorizationActivity : AppCompatActivity(),AuthorizationContract.View {
 
     }
 
-
-    override fun setPresenter(presenter: AuthorizationContract.Presenter) {
-        this.authorizationPresenter=presenter
-    }
-
     private fun getAuthoriazation() {
         val authorizedURL = HttpUrl.parse(Constants.OAUTH_URL)
             ?.newBuilder()
@@ -99,6 +91,10 @@ class AuthorizationActivity : AppCompatActivity(),AuthorizationContract.View {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         finish()
+    }
+
+    override fun launchConsentScreen() {
+
     }
 
 

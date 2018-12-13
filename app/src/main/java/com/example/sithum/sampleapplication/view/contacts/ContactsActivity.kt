@@ -12,10 +12,11 @@ import android.widget.Toast
 import com.example.sithum.sampleapplication.*
 import com.example.sithum.sampleapplication.models.Contact
 import com.example.sithum.sampleapplication.view.login.MainActivity
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
 
-class Contacts : AppCompatActivity(),ContactsContract.View {
+class Contacts : DaggerAppCompatActivity(),ContactsContract.View {
 
     lateinit var recyclerView: RecyclerView
     private var adapter: RecyclerView.Adapter<*>? = null
@@ -29,7 +30,6 @@ class Contacts : AppCompatActivity(),ContactsContract.View {
         setContentView(R.layout.activity_contacts)
         recyclerView = findViewById(R.id.recyclerView)
 
-        ContactsPresenter(this)
         contactsPresenter.getContacts(this)
     }
 
@@ -39,9 +39,6 @@ class Contacts : AppCompatActivity(),ContactsContract.View {
     }
 
 
-    override fun setPresenter(presenter: ContactsContract.Presenter) {
-          this.contactsPresenter=presenter
-    }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 

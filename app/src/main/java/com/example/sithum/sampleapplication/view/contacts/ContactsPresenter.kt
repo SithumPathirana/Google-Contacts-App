@@ -13,14 +13,6 @@ import retrofit2.Response
 class ContactsPresenter(private val view:ContactsContract.View):ContactsContract.Presenter{
     private val TAG = "ContactsPresenter"
 
-    init {
-        this.view.setPresenter(this)
-    }
-
-    override fun start() {
-
-    }
-
     override fun getContacts(ctx:Context) {
         Log.e(TAG,"Getting the contacts from server ")
         val server = RetrofitBuilder.getAuthClient(ctx)

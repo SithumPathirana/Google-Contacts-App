@@ -10,16 +10,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 
 class LoginPresenter(private val view:LoginContract.View):LoginContract.Presenter {
 
-    init {
-        this.view.setPresenter(this)
-
-
-    }
-
-    override fun start() {
-
-    }
-
     override fun firebaseAuthWithGoogle(acct: GoogleSignInAccount?,auth:FirebaseAuth,activity:MainActivity) {
         Log.d("", "firebaseAuthWithGoogle:" + acct?.id!!)
         val credential = GoogleAuthProvider.getCredential(acct?.idToken, null)

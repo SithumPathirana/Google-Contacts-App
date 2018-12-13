@@ -6,12 +6,14 @@ import com.example.sithum.sampleapplication.BaseView
 
 interface AuthorizationContract {
 
-    interface View:BaseView<Presenter>{
+    interface View{
        fun setContactsActivity(newTask:Boolean)
+        fun launchConsentScreen()
     }
 
 
-    interface Presenter:BasePresenter{
+    interface Presenter{
         fun getTokenFromUrl(code:String?,ctx: Context)
+        fun setAuthUrl()
     }
 }

@@ -1,7 +1,6 @@
 package com.example.sithum.sampleapplication.di
 
 import android.app.Application
-import com.example.sithum.sampleapplication.view.contacts.ContactsModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector

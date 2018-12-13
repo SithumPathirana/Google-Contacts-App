@@ -13,10 +13,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(),LoginContract.View {
+class MainActivity : DaggerAppCompatActivity(),LoginContract.View {
     private val TAG = "LoginActivity"
 
     @Inject lateinit var loginPresenter : LoginContract.Presenter
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity(),LoginContract.View {
         setContentView(R.layout.activity_main)
         signInButton=findViewById(R.id.sign_in_button)
 
-        LoginPresenter(this)
+
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -46,11 +47,6 @@ class MainActivity : AppCompatActivity(),LoginContract.View {
 
         }
         auth = FirebaseAuth.getInstance()
-    }
-
-
-    override fun setPresenter(presenter: LoginContract.Presenter) {
-            this.loginPresenter=presenter
     }
 
     override fun onStart() {
