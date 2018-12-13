@@ -56,6 +56,8 @@ dependencies {
     kapt 'com.google.dagger:dagger-android-processor:2.11'
     kapt 'com.google.dagger:dagger-compiler:2.11'
     androidTestImplementation 'com.google.code.findbugs:jsr305:3.0.1'
+    apply plugin: 'realm-android'
+    implementation 'io.realm:android-adapters:2.0.0'
 
 }
 
