@@ -2,7 +2,6 @@ package com.example.sithum.sampleapplication.view.contacts
 
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -11,8 +10,10 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.sithum.sampleapplication.*
 import com.example.sithum.sampleapplication.models.Contact
+import com.example.sithum.sampleapplication.realmdb.ContactsIntfImpl
 import com.example.sithum.sampleapplication.view.login.MainActivity
 import dagger.android.support.DaggerAppCompatActivity
+import io.realm.Realm
 import javax.inject.Inject
 
 
@@ -23,13 +24,14 @@ class Contacts : DaggerAppCompatActivity(),ContactsContract.View {
     private var layoutManager: RecyclerView.LayoutManager? = null
 
 
+
+
     @Inject lateinit var contactsPresenter: ContactsContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contacts)
         recyclerView = findViewById(R.id.recyclerView)
-
         contactsPresenter.getContacts(this)
     }
 

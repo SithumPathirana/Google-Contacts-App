@@ -1,19 +1,22 @@
-package com.example.sithum.sampleapplication.realmdb
+package com.example.sithum.sampleapplication.models
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.Required
 
-open class ContactEntity:RealmObject(){
 
-    @Required
+open class ContactEntity(
     @PrimaryKey
-    var id:String?=null
-
     @Required
-    var name:String?=null
-
+    var id:String?="",
     @Required
-    var phoneNumber:String?=null
+    var name:String?="",
+    @Required
+    var phoneNumber:String?=""
+):RealmObject(){
 
+    fun copy(
+         id: String? = this.id,
+         name: String? = this.name,
+         phoneNumber: String? = this.phoneNumber)=ContactEntity(id,name,phoneNumber)
 }

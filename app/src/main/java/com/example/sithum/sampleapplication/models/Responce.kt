@@ -23,10 +23,14 @@ class Contact{
 
     constructor() {}
 
-    constructor(name: String, phoneNumber: String) {
+    constructor(name: String, phoneNumber: String,id:String) {
         this.name = name
         this.phoneNumber = phoneNumber
+        this.id=id
     }
+
+    @field:Element(name = "id",required = false)
+    var id:String?=null
 
     @field:Element(name = "title",required = false)
     var name: String? = null

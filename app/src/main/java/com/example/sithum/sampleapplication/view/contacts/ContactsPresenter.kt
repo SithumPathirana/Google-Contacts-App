@@ -4,14 +4,21 @@ import android.content.Context
 import android.util.Log
 import com.example.sithum.sampleapplication.MyApplication
 import com.example.sithum.sampleapplication.api.RetrofitBuilder
+import com.example.sithum.sampleapplication.models.Contact
+import com.example.sithum.sampleapplication.models.ContactEntity
 import com.example.sithum.sampleapplication.models.Responce
+import com.example.sithum.sampleapplication.realmdb.ContactsIntfImpl
 import com.google.firebase.auth.FirebaseAuth
+import io.realm.Realm
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ContactsPresenter(private val view:ContactsContract.View):ContactsContract.Presenter{
     private val TAG = "ContactsPresenter"
+
+    private var realm: Realm? = null
+
 
     override fun getContacts(ctx:Context) {
         Log.e(TAG,"Getting the contacts from server ")
@@ -21,6 +28,14 @@ class ContactsPresenter(private val view:ContactsContract.View):ContactsContract
         contactList.enqueue(object: Callback<Responce> {
 
             override fun onResponse(call: Call<Responce>, response: Response<Responce>) {
+                var allContacts=response.body()?.contacts
+                realm = Realm.getDefaultInstance()
+                var contactsModel= ContactsIntfImpl()
+
+                allContacts?.forEach {
+                         contact-> contactsModel.addContact(realm!!,ContactEntity(contact.id,contact.name,contact.phoneNumber))
+                    }
+
                 view.showContactList(response.body()?.contacts)
             }
 

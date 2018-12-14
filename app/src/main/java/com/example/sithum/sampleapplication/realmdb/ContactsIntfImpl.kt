@@ -8,14 +8,14 @@ import java.lang.Exception
 class ContactsIntfImpl:ContactsInterface{
 
     override fun addContact(realm: Realm, contact: ContactEntity): Boolean {
-           try {
+         return  try {
                realm.beginTransaction()
                realm.copyToRealmOrUpdate(contact)
                realm.commitTransaction()
-               return true
+               true
            }catch (e:Exception){
                println(e)
-               return false
+                false
            }
 
 
@@ -27,14 +27,14 @@ class ContactsIntfImpl:ContactsInterface{
 
 
     override fun delContact(realm: Realm, id: Int): Boolean {
-               try {
+             return  try {
                    realm.beginTransaction()
                    realm.commitTransaction()
                    realm.where(ContactEntity::class.java).equalTo("id",id).findFirst().deleteFromRealm()
-                   return true
+                   true
                }catch (e:Exception){
                   println(e)
-                   return false
+                 false
                }
     }
 
