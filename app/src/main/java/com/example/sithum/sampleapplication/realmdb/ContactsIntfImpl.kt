@@ -1,24 +1,41 @@
 package com.example.sithum.sampleapplication.realmdb
 
+import android.util.Log
 import com.example.sithum.sampleapplication.models.ContactEntity
 import io.realm.Realm
+import io.realm.RealmList
 import io.realm.RealmResults
 import java.lang.Exception
 
 class ContactsIntfImpl:ContactsInterface{
+    private val TAG="ContactsIntfImpl"
 
     override fun addContact(realm: Realm, contact: ContactEntity): Boolean {
          return  try {
                realm.beginTransaction()
                realm.copyToRealmOrUpdate(contact)
                realm.commitTransaction()
+               Log.e(TAG,"Succesfully added the contact")
                true
            }catch (e:Exception){
-               println(e)
+               println("Error when adding the contact" +e)
                 false
            }
+    }
 
-
+    override fun addContacts(realm: Realm, contactList: List<ContactEntity>) :Boolean{
+        return try {
+            realm.beginTransaction()
+            val contacts=RealmList<ContactEntity>()
+            contacts.addAll(contactList)
+            realm.insertOrUpdate(contacts)
+            realm.commitTransaction()
+            Log.e(TAG,"Succesfully saved the contact to the realm")
+            true
+        }catch (e:Exception){
+            println("Error while adding contacts "+e)
+            false
+        }
     }
 
     override fun getAllContacts(realm: Realm): RealmResults<ContactEntity> {
@@ -26,7 +43,7 @@ class ContactsIntfImpl:ContactsInterface{
     }
 
 
-    override fun delContact(realm: Realm, id: Int): Boolean {
+    override fun deleteContact(realm: Realm, id: Int): Boolean {
              return  try {
                    realm.beginTransaction()
                    realm.commitTransaction()
