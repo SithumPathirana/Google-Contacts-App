@@ -9,9 +9,7 @@ open class ContactEntity(
     @PrimaryKey
     @Required
     var id:String?="",
-    @Required
     var name:String?="",
-    @Required
     var phoneNumber:String?=""
 ):RealmObject(){
 
