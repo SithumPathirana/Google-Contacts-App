@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import com.example.sithum.sampleapplication.MyApplication
 import com.example.sithum.sampleapplication.api.RetrofitBuilder
-import com.example.sithum.sampleapplication.models.Contact
 import com.example.sithum.sampleapplication.models.ContactEntity
 import com.example.sithum.sampleapplication.models.Responce
 import com.example.sithum.sampleapplication.realmdb.ContactsIntfImpl
@@ -31,12 +30,17 @@ class ContactsPresenter(private val view:ContactsContract.View):ContactsContract
                 var allContacts=response.body()?.contacts
                 realm = Realm.getDefaultInstance()
                 var contactsModel= ContactsIntfImpl()
+                var a=ArrayList<ContactEntity>()
 
-                allContacts?.forEach {
-                         contact-> contactsModel.addContact(realm!!,ContactEntity(contact.id,contact.name,contact.phoneNumber))
-                    }
+                allContacts?.forEach{
+                    contact -> a.add(ContactEntity(contact.id,contact.name,contact.phoneNumber))
+                    Log.e(TAG,"Added contact to the list succesfully")
+                }
 
-                view.showContactList(response.body()?.contacts)
+                contactsModel.addContacts(realm!!,a)
+
+
+                view.showContactList(allContacts)
             }
 
             override fun onFailure(call: Call<Responce>, t: Throwable) {
@@ -58,8 +62,4 @@ class ContactsPresenter(private val view:ContactsContract.View):ContactsContract
              view.goBackToLoginActivity(true)
         }
     }
-
-
-
-
 }
